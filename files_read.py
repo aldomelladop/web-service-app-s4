@@ -1,10 +1,5 @@
 # Importamos librerias necesarias para proyecto
 import pandas as pd
-import plotly.express as px
-
-"""
-    Ejecutamos la lectura de los archivos que nos permitirán ejecutar el análisis del proyecto
-"""
 
 # Lectura de los archivos
 car_data = pd.read_csv('./notebooks/vehicles_us.csv')  # leer los datos
@@ -26,10 +21,11 @@ car_data = pd.read_csv('./notebooks/vehicles_us.csv')  # leer los datos
         12. date_posted: Fecha de publicación del anuncio.
         13. days_listed: Días que el anuncio estuvo activo.
 
-        Se verificó que los nombres de las columnas están en snake_case, que sus tipos de datos son concordantes con la información mostrada y su nomenclatura es la adecuada.
+        Se verificó que los nombres de las columnas están en snake_case, que sus tipos de datos son concordantes 
+        con la información mostrada y su nomenclatura es la adecuada.
 """
 
-# Analizamos la información y el tipo de datos de las columnas del dataFrame
+# Analizamos el tipo de datos de las columnas del dataFrame
 print(car_data.info())
 
 # Verificamos si hay valores NaN
@@ -43,6 +39,11 @@ print(car_data.info())
 
 # Creación de función de corrección de nombres de columnas
 def fix_columns_name(df):
+    """
+        La funcion 'fix_columnns_name' permite corregir nombres de columnas que pudieran
+        tener problemas o errores tipograficos y/o espacios en blanco y renombrarlas con
+        las versiones corregidas
+    """
     new_columns = []  # Lista que almacenará los nombres corregidos de columnas
 
     for column in df.columns:
@@ -64,7 +65,11 @@ fix_columns_name(car_data)
 
 
 def hallar_repetidos(df):
-    # Analizamos las columnas {condition, fuel, transmission, type, paint_color} para encontrar valores repetidos
+    """
+        Analiza las columnas {condition, fuel, transmission, type, paint_color} para encontrar 
+        duplicados implicitos, es decir,columnas cuyo nombre es similar a otros pero no exactamente 
+        iguales.
+    """
     columns_to_check = ['condition', 'fuel',
                         'transmission', 'type', 'paint_color']
 
@@ -82,5 +87,6 @@ def hallar_repetidos(df):
 
 
 # Uso de la función
-repetidos = hallar_repetidos(car_data)
 # comprobamos que no existen duplicados implícitos en las columnas seleccionadas
+repetidos = hallar_repetidos(car_data)
+# print("Duplicados implícitos:\n", repetidos)
