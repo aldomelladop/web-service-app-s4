@@ -2,8 +2,12 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-# Carga de datos (asegúrate de que la ruta al archivo CSV sea la correcta)
-car_data = pd.read_csv('./notebooks/vehicles_us.csv')
+# Intento de carga de datos
+try:
+    car_data = pd.read_csv('./notebooks/vehicles_us.csv')
+except Exception as e:
+    st.error(f"Se produjo un error al cargar los datos: {e}")
+    st.stop()
 
 # Creación del título y descripción en la app web
 st.header("Web App - Data Visualization")
@@ -14,7 +18,7 @@ st.write('Seleccione alguna de las opciones que siguen:')
 check1 = st.checkbox("Crear histograma según 'paint_color'")
 check2 = st.checkbox("Crear histograma según 'condition'")
 check3 = st.checkbox("Crear histograma según 'type'")
-check4 = st.checkbox("Crear histograma según 'fuel")
+check4 = st.checkbox("Crear histograma según 'fuel'")
 
 # Lista para almacenar los gráficos seleccionados
 selected_charts = []
@@ -47,32 +51,29 @@ st.header("Web App - Análisis adicional")
 # Menú desplegable para seleccionar el gráfico
 option = st.selectbox(
     'Selecciona el gráfico que deseas visualizar:',
-    ('Distribución del Kilometraje', 'Kilometraje vs Precio', 'Distribución de días de publicación',
-     'Tiempo Medio de Publicación por tipo de vehículo y Condición')
+    ('Kilometraje vs Precio', 'Tipo de vehículo vs Precio',
+     'Tiempo Medio de Publicación por Modelo y Condición', 'Modelo Año vs Precio')
 )
 
 # Visualización del gráfico seleccionado
-if option == 'Distribución del Kilometraje':
-    fig = px.histogram(car_data, x='odometer',
-                       color='odometer',
-                       title='Distribución del Kilometraje')
-    st.plotly_chart(fig, use_container_width=True)
-
-elif option == 'Kilometraje vs Precio':
+if option == 'Kilometraje vs Precio':
     fig = px.scatter(car_data, x='odometer', y='price',
-                     color='price',
                      title='Kilometraje vs Precio')
     st.plotly_chart(fig, use_container_width=True)
 
-elif option == 'Tipo de vehículo v/s Precio':
+elif option == 'Tipo de vehículo vs Precio':
     fig = px.scatter(car_data, x='type', y='price',
-                     color='price',
-                     title='Tipo vs Precio')
+                     title='Tipo de Vehículo vs Precio')
     st.plotly_chart(fig, use_container_width=True)
 
 elif option == 'Tiempo Medio de Publicación por Modelo y Condición':
     grouped_data = car_data.groupby(['model', 'condition'])[
         'days_listed'].mean().reset_index()
     fig = px.bar(grouped_data, x='model', y='days_listed', color='condition',
-                 barmode='group', title='Tiempo Medio de Publicación por Modelo y Condición')
+                 title='Tiempo Medio de Publicación por Modelo y Condición')
+    st.plotly_chart(fig, use_container_width=True)
+
+elif option == 'Modelo Año vs Precio':
+    fig = px.scatter(car_data, x='model_year', y='price',
+                     title='Modelo Año vs Precio')
     st.plotly_chart(fig, use_container_width=True)
