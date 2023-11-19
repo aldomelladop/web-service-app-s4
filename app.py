@@ -64,10 +64,10 @@ elif option == 'Kilometraje vs Precio':
                      title='Kilometraje vs Precio')
     st.plotly_chart(fig, use_container_width=True)
 
-elif option == 'Distribución de días de publicación':
-    fig = px.histogram(car_data, x='days_listed',
-                       color='days_listed',
-                       title='Distribución de días de publicación')
+elif option == 'Tipo de vehículo v/s Precio':
+    fig = px.scatter(car_data, x='type', y='price',
+                     color='price',
+                     title='Tipo vs Precio')
     st.plotly_chart(fig, use_container_width=True)
 
 elif option == 'Tiempo Medio de Publicación por Modelo y Condición':
